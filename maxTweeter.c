@@ -21,6 +21,7 @@ int main(int argc, char** argv){
             exit(0);
         }
         int counter_line = 0;
+        int name_col = 0;
         while (getline(&eachline, &len, csv_text) != -1){
             char* token = NULL;
             //printf("%s\n", token);
@@ -29,10 +30,17 @@ int main(int argc, char** argv){
             // I used strsep because it can also take in zero-string lengths
             while ((token = strsep(&eachline, ","))!= NULL) {
                 //trying to print out name
-                if (counter_line == 0 && counter_col == 8) {
+                // also not necessarily column 8, have to fix
+                // strcmp doesn't compare the exact string
+                if (counter_line == 0 && counter_col == 8 && strcmp(token, "name ")) {
+                    //assign the column where the names are to use for comparison later
+                    name_col = counter_col;
                     printf("%s\n", token); 
                 }
-                if (counter_line > 0 && counter_col == 8) {
+
+                if (counter_line > 0 && counter_col == name_col) {
+                    //need to make a key and value sort of thing in c
+                    //No maps in c, so use a struct???
                     printf("%s\n", token); 
                 }
                 token = strtok(NULL, ",");
