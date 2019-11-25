@@ -12,7 +12,7 @@ int main(int argc, char** argv){
     char str[100];
     char *eachline = NULL;
     size_t len = 1000;
-    ssize_t line_size;
+    size_t line_size;
     struct count_tweeters map;
     int array_tracker;
 
