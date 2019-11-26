@@ -15,6 +15,7 @@ int main(int argc, char** argv){
     ssize_t line_size;
     struct count_tweeters map;
     int array_tracker;
+    char* name = "name";
 
     if (argc != 2){
         printf("Not Valid Input\n");
@@ -39,11 +40,14 @@ int main(int argc, char** argv){
                 //trying to print out name
                 // also not necessarily column 8, have to fix
                 // strcmp doesn't compare the exact string
-                if (counter_line == 0 && counter_col == 8 && strcmp(token, "name ")) {
-                    printf("Token: %lu, Name: %lu\n", strlen(token), strlen("name "));
+                //while(strcmp(token, "name") != 0)
+                if (counter_line == 0 && !strncmp(token, name, 5)) {
+                    printf("Strcmp #: %d, \n",  counter_col);
+                    //printf("Token: %lu, Name: %lu\n", strlen(token), strlen("name "));
                     //assign the column where the names are to use for comparison later
                     name_col = counter_col;
-                    printf("%s\n", token); 
+                    printf("%lu,%s\n", strlen(token), token);
+                    //printf("%s\n", token); 
                 }
 
                 //check the specific column for the name
