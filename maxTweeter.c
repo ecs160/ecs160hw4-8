@@ -3,51 +3,60 @@
 #include <string.h>
 //test
 struct count_tweeters{
-        char* list_names[10];
-        int count[10];
+        int capacity;
+        char* list_names[2];
+        int count[2];
     };
 
 int main(int argc, char** argv){
     FILE *csv_text;
-    char str[100];
     char *eachline = NULL;
-    size_t len = 1000;
-    size_t line_size;
-    struct count_tweeters map;
-    int array_tracker;
     char* name = "name";
+    struct count_tweeters map;
+    // Assign Capacity
+    int initial_cap = 2;
+    map.capacity = initial_cap;
+
+    //char str[100];
+    size_t len = 1024;
+    size_t line_size;
+    int array_tracker = 0;
+
+    char* static_arr[20000] = {[0 ... 19999] = ""};
+    int count_arr[20000] = {[0 ... 19999] = 0};
 
     if (argc != 2){
-        printf("Not Valid Input\n");
+        printf("Invalid Input Format\n");
         exit(0);
     }
 
     if (argc == 2){
         csv_text = fopen(argv[1], "r");
+        
         if (csv_text == NULL) {
-            printf("Can't open file\n");
+            printf("Invalid File Format\n");
             exit(0);
         }
+
         int counter_line = 0;
         int name_col = 0;
+
         while (getline(&eachline, &len, csv_text) != -1){
+            
             char* token = NULL;
             //printf("%s\n", token);
             int counter_col = 0;
+
             // have to check each token, it just takes away all the blanks for some reason
             // I used strsep because it can also take in zero-string lengths
             while ((token = strsep(&eachline, ","))!= NULL) {
-                //trying to print out name
-                // also not necessarily column 8, have to fix
-                // strcmp doesn't compare the exact string
-                //while(strcmp(token, "name") != 0)
+                // find "name" in the csv header file first line
+                // !strncmp(token, name, 5) finds the "name"
                 if (counter_line == 0 && !strncmp(token, name, 5)) {
-                    printf("Strcmp #: %d, \n",  counter_col);
-                    //printf("Token: %lu, Name: %lu\n", strlen(token), strlen("name "));
+                    printf("Strcmp #: %d ",  counter_col);
+                    printf("Strlen: %lu, String: %s\n", strlen(token), token);
                     //assign the column where the names are to use for comparison later
                     name_col = counter_col;
-                    printf("%lu,%s\n", strlen(token), token);
-                    //printf("%s\n", token); 
                 }
 
                 //check the specific column for the name
@@ -57,27 +66,39 @@ int main(int argc, char** argv){
                     int found_match = 0;
                     
                     //seg fault
-                    for (int i = 0; i < 10; i++){
+                    for (int i = 0; i < 19999; i++){
                         // if they have the same name, then increment the count
-                        // if (strcmp(token, map.list_names[i]) == strlen(token)){
-                        //      map.count[i] = map.count[i]+ 1;
-                        //      int found_match = 1;
-                        // }
-                    //map.list_names[counter_line - 1] = token;
-                    //map.count[counter_line - 1] = map.count[0]+ 1;
+                        if (!strncmp(token, static_arr[i], strlen(static_arr[i]) + 1)) {
+                            count_arr[i] = count_arr[i]+ 1;
+                            int found_match = 1;
+                            break;
+                        }
+                        //map.list_names[counter_line - 1] = token;
+                        //map.count[counter_line - 1] = map.count[0]+ 1;
                     
-                    //If no match was found for the name
+                        //If no match was found for the name
                     
-                    // if (found_match == 0){
-                    //     map.list_names[array_tracker] = token;
-                    //     map.count[array_tracker] = map.count[array_tracker]+ 1;
-                    //     array_tracker++;
-                    // }
+                        if (found_match == 0){
+                            if (array_tracker == 20000){
+                                exit(0);
+                            }
+                            static_arr[array_tracker] = token;
+                            count_arr[array_tracker] = count_arr[array_tracker] + 1;
 
-                    printf("%s\n", token); 
+                            //map.list_names[array_tracker] = token;
+                            //map.count[array_tracker] = map.count[array_tracker]+ 1;
+                            //array_tracker++;
+                            //printf("array_tracker: %d", array_tracker);
+                            array_tracker++;
+                            break;
+                        }
+
+                         
                     }
+                    //printf("%s\n", token);
                 }
-                token = strtok(NULL, ",");
+                //token = strtok(NULL, ",");
+                //printf("%s\n", token);
                 counter_col++; 
             }
             //printf("%s\n", token);
@@ -88,9 +109,10 @@ int main(int argc, char** argv){
     
     //Not causing seg fault
     //Print the tweeters with their respective count
-    //for (int i = 0; i < 10; i++) {
-    //    printf("%s : %i\n", map.list_names[i], map.count[i]);
-    //}
+    for (int i = 0; i < 8; i++) {
+        //printf("%s : %i\n", map.list_names[i], map.count[i]);
+        printf("Strings: %s, Count: %d\n", static_arr[i], count_arr[i]);
+    }
     
     return 0;
 }
