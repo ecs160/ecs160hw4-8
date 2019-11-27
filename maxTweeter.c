@@ -54,8 +54,8 @@ int main(int argc, char** argv){
                 // find "name" in the csv header file first line
                 // !strncmp(token, name, 5) finds the "name"
                 if (counter_line == 0 && !strncmp(token, name, 5)) {
-                    printf("Strcmp #: %d ",  counter_col);
-                    printf("Strlen: %lu, String: %s\n", strlen(token), token);
+                    //printf("Strcmp #: %d ",  counter_col);
+                    //printf("Strlen: %lu, String: %s\n", strlen(token), token);
                     //assign the column where the names are to use for comparison later
                     name_col = counter_col;
                 }
@@ -69,10 +69,10 @@ int main(int argc, char** argv){
                     //seg fault
                     for (int i = 0; i < array_tracker; i++){
                         // if they have the same name, then increment the count
-                        printf("Comparing %s with %s\n", token, static_arr[i]);
+                        //printf("Comparing %s with %s\n", token, static_arr[i]);
                         if (!strncmp(token, static_arr[i], strlen(static_arr[i]) + 1)) {
-                            printf("Incrementing count for %s\n", static_arr[i]);
-                            printf("Old count: %d\n", count_arr[i]);
+                            //printf("Incrementing count for %s\n", static_arr[i]);
+                            //printf("Old count: %d\n", count_arr[i]);
                             count_arr[i] = count_arr[i]+ 1;
                             found_match = 1;
                             break;
@@ -115,11 +115,15 @@ int main(int argc, char** argv){
     //Print the tweeters with their respective count
     for (int i = 0; i < 10; i++) {
          //printf("%s : %i\n", map.list_names[i], map.count[i]);
-        printf("Strings: %s, Count: %d\n", static_arr[i], count_arr[i]);
+        //printf("Strings: %s, Count: %d\n", static_arr[i], count_arr[i]);
     }
     
     //Calculating the top ten tweeters
-    for (int i = 0; i < 10; i++){
+    int reps = 10;
+    if (array_tracker < 10){
+        reps = array_tracker;
+    }
+    for (int i = 0; i < reps; i++){
         int max_num = 0;
         int max_index = 0;
         for (int j = 0; j < array_tracker; j++){
@@ -129,10 +133,10 @@ int main(int argc, char** argv){
             }
         }
         //Set it to -1 since we are done with it and nothing can be less than 0;
-        if (i >= 10) {
+        if (i >= reps) {
             break;
-        } else if (i < 10){
-            //printf("%s : %d\n", static_arr[max_index], count_arr[max_index]);
+        } else if (i < reps){
+            printf("%s : %d\n", static_arr[max_index], count_arr[max_index]);
             count_arr[max_index] = -1;
         }
     }
