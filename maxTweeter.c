@@ -67,23 +67,24 @@ int main(int argc, char** argv){
                     int found_match = 0;
                     
                     //seg fault
-                    for (int i = 0; i < 19999; i++){
+                    for (int i = 0; i < array_tracker; i++){
                         // if they have the same name, then increment the count
                         printf("Comparing %s with %s\n", token, static_arr[i]);
                         if (!strncmp(token, static_arr[i], strlen(static_arr[i]) + 1)) {
                             printf("Incrementing count for %s\n", static_arr[i]);
                             printf("Old count: %d\n", count_arr[i]);
                             count_arr[i] = count_arr[i]+ 1;
-                            int found_match = 1;
-                            printf("New count: %d\n", count_arr[i]);
+                            found_match = 1;
                             break;
                         }
                         //map.list_names[counter_line - 1] = token;
                         //map.count[counter_line - 1] = map.count[0]+ 1;
                     
                         //If no match was found for the name
-                    
-                        if (found_match == 0){
+                      
+                    }
+
+                    if (found_match == 0){
                             //if (array_tracker == 20000){
                              //   exit(0);
                             //}
@@ -95,10 +96,8 @@ int main(int argc, char** argv){
                             //array_tracker++;
                             //printf("array_tracker: %d", array_tracker);
                             array_tracker++;
-                            break;
-                        }
+                            //break;
 
-                         
                     }
                     //printf("%s\n", token);
                 }
@@ -114,10 +113,10 @@ int main(int argc, char** argv){
     
     //Not causing seg fault
     //Print the tweeters with their respective count
-    //for (int i = 0; i < array_tracker; i++) {
-    //     //printf("%s : %i\n", map.list_names[i], map.count[i]);
-    //    printf("Strings: %s, Count: %d\n", static_arr[i], count_arr[i]);
-    //}
+    for (int i = 0; i < 10; i++) {
+         //printf("%s : %i\n", map.list_names[i], map.count[i]);
+        printf("Strings: %s, Count: %d\n", static_arr[i], count_arr[i]);
+    }
     
     //Calculating the top ten tweeters
     for (int i = 0; i < 10; i++){
@@ -133,7 +132,7 @@ int main(int argc, char** argv){
         if (i >= 10) {
             break;
         } else if (i < 10){
-            printf("%s : %d\n", static_arr[max_index], count_arr[max_index]);
+            //printf("%s : %d\n", static_arr[max_index], count_arr[max_index]);
             count_arr[max_index] = -1;
         }
     }
