@@ -69,9 +69,13 @@ int main(int argc, char** argv){
                     //seg fault
                     for (int i = 0; i < 19999; i++){
                         // if they have the same name, then increment the count
+                        printf("Comparing %s with %s\n", token, static_arr[i]);
                         if (!strncmp(token, static_arr[i], strlen(static_arr[i]) + 1)) {
+                            printf("Incrementing count for %s\n", static_arr[i]);
+                            printf("Old count: %d\n", count_arr[i]);
                             count_arr[i] = count_arr[i]+ 1;
                             int found_match = 1;
+                            printf("New count: %d\n", count_arr[i]);
                             break;
                         }
                         //map.list_names[counter_line - 1] = token;
