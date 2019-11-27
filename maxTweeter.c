@@ -24,6 +24,7 @@ int main(int argc, char** argv){
 
     char* static_arr[20000] = {""};
     int count_arr[20000] = {[0 ... 19999] = 0};
+    int top_tweeters[10] = {[0 ... 9] = 0};
 
     if (argc != 2){
         printf("Invalid Input Format\n");
@@ -79,9 +80,9 @@ int main(int argc, char** argv){
                         //If no match was found for the name
                     
                         if (found_match == 0){
-                            if (array_tracker == 20000){
-                                exit(0);
-                            }
+                            //if (array_tracker == 20000){
+                             //   exit(0);
+                            //}
                             static_arr[array_tracker] = token;
                             count_arr[array_tracker] = count_arr[array_tracker] + 1;
 
@@ -109,11 +110,31 @@ int main(int argc, char** argv){
     
     //Not causing seg fault
     //Print the tweeters with their respective count
-    for (int i = 0; i < array_tracker; i++) {
-        //printf("%s : %i\n", map.list_names[i], map.count[i]);
-        printf("Strings: %s, Count: %d\n", static_arr[i], count_arr[i]);
-    }
+    //for (int i = 0; i < array_tracker; i++) {
+    //     //printf("%s : %i\n", map.list_names[i], map.count[i]);
+    //    printf("Strings: %s, Count: %d\n", static_arr[i], count_arr[i]);
+    //}
     
+    //Calculating the top ten tweeters
+    for (int i = 0; i < 10; i++){
+        int max_num = 0;
+        int max_index = 0;
+        for (int j = 0; j < array_tracker; j++){
+            if (count_arr[j] > max_num){
+                max_num = count_arr[j];
+                max_index = j;
+            }
+        }
+        //Set it to -1 since we are done with it and nothing can be less than 0;
+        if (i >= 10) {
+            break;
+        } else if (i < 10){
+            printf("%s : %d\n", static_arr[max_index], count_arr[max_index]);
+            count_arr[max_index] = -1;
+        }
+    }
+    //printf("%d\n", max_num);
+
     return 0;
 }
 
