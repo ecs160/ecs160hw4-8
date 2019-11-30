@@ -21,6 +21,7 @@ int main(int argc, char** argv){
     //additional checks
     //check each column's header to see if they have parentheses 
     int quotes_checker[16] = {[0 ... 15] = 0};
+    int quotes_tracker = 0;
 
     if (argc != 2){
         printf("Invalid Input Format\n");
@@ -49,6 +50,28 @@ int main(int argc, char** argv){
             // have to check each token, it just takes away all the blanks for some reason
             // I used strsep because it can also take in zero-string lengths
             while ((token = strsep(&eachline, ","))!= NULL) {
+
+                //this is just for header
+                //check for single quote
+                if (counter_line == 0 && strlen(token) == 1 && !strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
+                    printf("single quote\n");
+                    exit(0);
+                //check for matching parentheses
+                } else if (counter_line == 0 && !strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
+                    printf("working quotes\n");
+                //check for no quotes at beginning and end
+                } else if (counter_line == 0 && strncmp(&token[0],"\"",1) && strncmp(&token[strlen(token) - 1],"\"",1)){
+                    printf("working no quotes\n");
+                // if single quote is at beginning
+                } else if (counter_line == 0 && !strncmp(&token[0],"\"",1)) {
+                    printf("left-sided-quote\n");
+                    exit(0);
+                // if single quote is at end
+                } else if (counter_line == 0 && !strncmp(&token[strlen(token) - 1],"\"",1)) {
+                    printf("right-sided-quote\n");
+                    exit(0);
+                }
+
                 // find "name" in the csv header file first line
                 // !strncmp(token, name, 5) finds the "name"
                 if (counter_line == 0 && (!strncasecmp(token, name, 5) || !strncasecmp(token, quoted_name, 7))){
