@@ -1,23 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//test
-struct count_tweeters{
-        int capacity;
-        char* list_names[2];
-        int count[2];
-    };
 
 int main(int argc, char** argv){
     FILE *csv_text;
     char *eachline = NULL;
     char* name = "name";
-    struct count_tweeters map;
+    char* quoted_name = "\"name\"";
     // Assign Capacity
     int initial_cap = 2;
-    map.capacity = initial_cap;
 
-    //char str[100];
     size_t len = 1024;
     size_t line_size;
     int array_tracker = 0;
@@ -25,6 +17,10 @@ int main(int argc, char** argv){
     char* static_arr[20000] = {""};
     int count_arr[20000] = {[0 ... 19999] = 0};
     int top_tweeters[10] = {[0 ... 9] = 0};
+
+    //additional checks
+    //check each column's header to see if they have parentheses 
+    int quotes_checker[16] = {[0 ... 15] = 0};
 
     if (argc != 2){
         printf("Invalid Input Format\n");
@@ -42,6 +38,8 @@ int main(int argc, char** argv){
         int counter_line = 0;
         int name_col = 0;
 
+        int name_header_there = 0;
+
         while (getline(&eachline, &len, csv_text) != -1){
             
             char* token = NULL;
@@ -53,11 +51,12 @@ int main(int argc, char** argv){
             while ((token = strsep(&eachline, ","))!= NULL) {
                 // find "name" in the csv header file first line
                 // !strncmp(token, name, 5) finds the "name"
-                if (counter_line == 0 && !strncmp(token, name, 5)) {
+                if (counter_line == 0 && (!strncasecmp(token, name, 5) || !strncasecmp(token, quoted_name, 7))){
                     //printf("Strcmp #: %d ",  counter_col);
                     //printf("Strlen: %lu, String: %s\n", strlen(token), token);
                     //assign the column where the names are to use for comparison later
                     name_col = counter_col;
+                    name_header_there++;
                 }
 
                 //check the specific column for the name
@@ -70,34 +69,21 @@ int main(int argc, char** argv){
                     for (int i = 0; i < array_tracker; i++){
                         // if they have the same name, then increment the count
                         //printf("Comparing %s with %s\n", token, static_arr[i]);
-                        if (!strncmp(token, static_arr[i], strlen(static_arr[i]) + 1)) {
+                        if (!strncasecmp(token, static_arr[i], strlen(static_arr[i]) + 1)) {
                             //printf("Incrementing count for %s\n", static_arr[i]);
                             //printf("Old count: %d\n", count_arr[i]);
                             count_arr[i] = count_arr[i]+ 1;
                             found_match = 1;
                             break;
                         }
-                        //map.list_names[counter_line - 1] = token;
-                        //map.count[counter_line - 1] = map.count[0]+ 1;
-                    
-                        //If no match was found for the name
-                      
                     }
 
+                    //If no match was found for the name
                     if (found_match == 0){
-                            //if (array_tracker == 20000){
-                             //   exit(0);
-                            //}
                             static_arr[array_tracker] = token;
                             count_arr[array_tracker] = count_arr[array_tracker] + 1;
-
-                            //map.list_names[array_tracker] = token;
-                            //map.count[array_tracker] = map.count[array_tracker]+ 1;
-                            //array_tracker++;
                             //printf("array_tracker: %d", array_tracker);
                             array_tracker++;
-                            //break;
-
                     }
                     //printf("%s\n", token);
                 }
@@ -107,6 +93,15 @@ int main(int argc, char** argv){
             }
             //printf("%s\n", token);
             //printf("%s\n",eachline);
+
+            if (name_header_there == 0){
+                printf("Name header not found\n");
+                exit(0);
+            } else if (name_header_there > 1){
+                printf("Duplicate name headers\n");
+                exit(0);
+            }
+
             counter_line++;
         }
     }
