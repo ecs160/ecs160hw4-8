@@ -34,7 +34,7 @@ int main(int argc, char** argv){
         csv_text = fopen(argv[1], "r");
         
         if (csv_text == NULL) {
-            printf("Invalid File Format\n");
+            printf("Invalid Input Format\n");
             exit(0);
         }
 
@@ -45,12 +45,12 @@ int main(int argc, char** argv){
 
         while (getline(&eachline, &len, csv_text) != -1){
             if (strlen(eachline) > 1024){
-                printf("Cannot exceed 1024 characters per line\n");
+                printf("Invalid Input Format\n");
                 exit(0);
             }
 
             if (counter_line >= 20000){
-                printf("Cannot exceed 20000 lines\n");
+                printf("Invalid Input Format\n");
                 exit(0);
             }
             char* token = NULL;
@@ -64,7 +64,7 @@ int main(int argc, char** argv){
                 //this is just for header
                 //check for single quote
                 if (counter_line == 0 && strlen(token) == 1 && !strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
-                    printf("single quote\n");
+                    printf("Invalid Input Format\n");
                     exit(0);
                 //check for matching parentheses
                 } else if (counter_line == 0 && !strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
@@ -78,11 +78,11 @@ int main(int argc, char** argv){
                     quotes_tracker++;
                 // if single quote is at beginning
                 } else if (counter_line == 0 && !strncmp(&token[0],"\"",1)) {
-                    printf("left-sided-quote\n");
+                    printf("Invalid Input Format\n");
                     exit(0);
                 // if single quote is at end
                 } else if (counter_line == 0 && !strncmp(&token[strlen(token) - 1],"\"",1)) {
-                    printf("right-sided-quote\n");
+                    printf("Invalid Input Format\n");
                     exit(0);
                 }
 
@@ -99,15 +99,14 @@ int main(int argc, char** argv){
                 //checks for consistency for each token in each line with the header
                 if (counter_line > 0) {
                     if (strlen(token) == 1 && !strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
-                        printf("single quote\n");
+                        printf("Invalid Input Format\n");
                         exit(0);
                     //check for matching parentheses
                     } else if (!strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
                         //printf("working quotes\n");
                         int non_header_quoted = 1;
                         if (non_header_quoted != quotes_checker[counter_col]){
-                            printf("Inconsistent quotes and nonquotes between header and non-header rows\n");
-                            printf("Line: %d Col: %d\n", counter_line, counter_col);
+                            printf("Invalid Input Format\n");
                             exit(0);
                         }
                     //check for no quotes at beginning and end
@@ -115,17 +114,16 @@ int main(int argc, char** argv){
                         //printf("working no quotes\n");
                         int non_header_quoted = 0;
                         if (non_header_quoted != quotes_checker[counter_col]){
-                            printf("Inconsistent quotes and nonquotes between header and non-header rows\n");
-                            printf("Line: %d Col: %d\n", counter_line, counter_col);
+                            printf("Invalid Input Format\n");
                             exit(0);
                         }
                     // if single quote is at beginning
                     } else if (!strncmp(&token[0],"\"",1)) {
-                        printf("left-sided-quote\n");
+                        printf("Invalid Input Format\n");
                         exit(0);
                     // if single quote is at end
                     } else if (!strncmp(&token[strlen(token) - 1],"\"",1)) {
-                        printf("right-sided-quote\n");
+                        printf("Invalid Input Format\n");
                         exit(0);
                     }
                 }
@@ -168,23 +166,16 @@ int main(int argc, char** argv){
             //printf("%s\n",eachline);
 
             if (name_header_there == 0){
-                printf("Name header not found\n");
+                printf("Invalid Input Format\n");
                 exit(0);
             } else if (name_header_there > 1){
-                printf("Duplicate name headers\n");
+                printf("Invalid Input Format\n");
                 exit(0);
             }
 
             counter_line++;
         }
     }
-    
-    //Not causing seg fault
-    //Print the tweeters with their respective count
-    //for (int i = 0; i < 10; i++) {
-         //printf("%s : %i\n", map.list_names[i], map.count[i]);
-        //printf("Strings: %s, Count: %d\n", static_arr[i], count_arr[i]);
-    //}
     
     //Calculating the top ten tweeters
     int reps = 10;
@@ -221,5 +212,3 @@ int main(int argc, char** argv){
     }
     return 0;
 }
-
-//"cl-tweets-short-clean.csv"
