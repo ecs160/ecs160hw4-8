@@ -95,20 +95,20 @@ int main(int argc, char** argv){
                         exit(0);
                     //check for matching parentheses
                     } else if (!strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
-                        //printf("working quotes\n");
+                        printf("working quotes\n");
                         int non_header_quoted = 1;
                         if (non_header_quoted != quotes_checker[counter_col]){
                             printf("Inconsistent quotes and nonquotes between header and non-header rows\n");
-                            printf("Col: %d\n", counter_col);
+                            printf("Line: %d Col: %d\n", counter_line, counter_col);
                             exit(0);
                         }
                     //check for no quotes at beginning and end
                     } else if (strncmp(&token[0],"\"",1) && strncmp(&token[strlen(token) - 1],"\"",1)){
-                        //printf("working no quotes\n");
+                        printf("working no quotes\n");
                         int non_header_quoted = 0;
                         if (non_header_quoted != quotes_checker[counter_col]){
                             printf("Inconsistent quotes and nonquotes between header and non-header rows\n");
-                            printf("Col: %d\n", counter_col);
+                            printf("Line: %d Col: %d\n", counter_line, counter_col);
                             exit(0);
                         }
                     // if single quote is at beginning
