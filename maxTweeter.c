@@ -58,10 +58,14 @@ int main(int argc, char** argv){
                     exit(0);
                 //check for matching parentheses
                 } else if (counter_line == 0 && !strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
-                    printf("working quotes\n");
+                    //printf("working quotes\n");
+                    quotes_checker[quotes_tracker] = 1;
+                    quotes_tracker++;
                 //check for no quotes at beginning and end
                 } else if (counter_line == 0 && strncmp(&token[0],"\"",1) && strncmp(&token[strlen(token) - 1],"\"",1)){
-                    printf("working no quotes\n");
+                    //printf("working no quotes\n");
+                    quotes_checker[quotes_tracker] = 0;
+                    quotes_tracker++;
                 // if single quote is at beginning
                 } else if (counter_line == 0 && !strncmp(&token[0],"\"",1)) {
                     printf("left-sided-quote\n");
@@ -80,6 +84,40 @@ int main(int argc, char** argv){
                     //assign the column where the names are to use for comparison later
                     name_col = counter_col;
                     name_header_there++;
+                }
+
+                //checks for consistency for each token in each line with the header
+                if (counter_line > 0) {
+                    if (strlen(token) == 1 && !strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
+                        printf("single quote\n");
+                        exit(0);
+                    //check for matching parentheses
+                    } else if (!strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
+                        //printf("working quotes\n");
+                        int non_header_quoted = 1;
+                        if (non_header_quoted != quotes_checker[counter_col]){
+                            printf("Inconsistent quotes and nonquotes between header and non-header rows\n");
+                            printf("Col: %d\n", counter_col);
+                            exit(0);
+                        }
+                    //check for no quotes at beginning and end
+                    } else if (strncmp(&token[0],"\"",1) && strncmp(&token[strlen(token) - 1],"\"",1)){
+                        //printf("working no quotes\n");
+                        int non_header_quoted = 0;
+                        if (non_header_quoted != quotes_checker[counter_col]){
+                            printf("Inconsistent quotes and nonquotes between header and non-header rows\n");
+                            printf("Col: %d\n", counter_col);
+                            exit(0);
+                        }
+                    // if single quote is at beginning
+                    } else if (!strncmp(&token[0],"\"",1)) {
+                        printf("left-sided-quote\n");
+                        exit(0);
+                    // if single quote is at end
+                    } else if (!strncmp(&token[strlen(token) - 1],"\"",1)) {
+                        printf("right-sided-quote\n");
+                        exit(0);
+                    }
                 }
 
                 //check the specific column for the name
@@ -131,10 +169,10 @@ int main(int argc, char** argv){
     
     //Not causing seg fault
     //Print the tweeters with their respective count
-    for (int i = 0; i < 10; i++) {
+    //for (int i = 0; i < 10; i++) {
          //printf("%s : %i\n", map.list_names[i], map.count[i]);
         //printf("Strings: %s, Count: %d\n", static_arr[i], count_arr[i]);
-    }
+    //}
     
     //Calculating the top ten tweeters
     int reps = 10;
