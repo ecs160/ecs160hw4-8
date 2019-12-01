@@ -44,7 +44,15 @@ int main(int argc, char** argv){
         int name_header_there = 0;
 
         while (getline(&eachline, &len, csv_text) != -1){
-            
+            if (strlen(eachline) > 1024){
+                printf("Cannot exceed 1024 characters per line\n");
+                exit(0);
+            }
+
+            if (counter_line >= 20000){
+                printf("Cannot exceed 20000 lines\n");
+                exit(0);
+            }
             char* token = NULL;
             //printf("%s\n", token);
             int counter_col = 0;
@@ -202,11 +210,11 @@ int main(int argc, char** argv){
                 for (int k = 1; k < strlen(static_arr[max_index]) - 1; k++){
                     printf("%c", static_arr[max_index][k]);
                 }
-                printf(" : %d\n", count_arr[max_index]);
+                printf(": %d\n", count_arr[max_index]);
                 count_arr[max_index] = -1;
             // if the column does not have quotes
             } else {
-                printf("%s : %d\n", static_arr[max_index], count_arr[max_index]);
+                printf("%s: %d\n", static_arr[max_index], count_arr[max_index]);
                 count_arr[max_index] = -1;
             }
         }
