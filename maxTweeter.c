@@ -22,7 +22,9 @@ int main(int argc, char** argv){
     //check each column's header to see if they have parentheses 
     int quotes_checker[16] = {[0 ... 15] = 0};
     int quotes_tracker = 0;
+    int name_col = 0;
 
+    //char* token_trial3 = malloc(1024);
     if (argc != 2){
         printf("Invalid Input Format\n");
         exit(0);
@@ -37,7 +39,7 @@ int main(int argc, char** argv){
         }
 
         int counter_line = 0;
-        int name_col = 0;
+        //int name_col = 0;
 
         int name_header_there = 0;
 
@@ -119,13 +121,15 @@ int main(int argc, char** argv){
                         exit(0);
                     }
                 }
+                //printf("Outside:%s\n",token);
+                //free(token_trial3);
 
                 //check the specific column for the name
                 if (counter_line > 0 && counter_col == name_col) {
                     //need to make a key and value sort of thing in c
                     //No maps in c, so use a struct???
                     int found_match = 0;
-                    
+                    //printf("%s\n",token);
                     //seg fault
                     for (int i = 0; i < array_tracker; i++){
                         // if they have the same name, then increment the count
@@ -192,12 +196,21 @@ int main(int argc, char** argv){
         if (i >= reps) {
             break;
         } else if (i < reps){
-            printf("%s : %d\n", static_arr[max_index], count_arr[max_index]);
-            count_arr[max_index] = -1;
+            // if the column does have quotes
+            if (quotes_checker[name_col] == 1){
+                //remove the quotes when printing 
+                for (int k = 1; k < strlen(static_arr[max_index]) - 1; k++){
+                    printf("%c", static_arr[max_index][k]);
+                }
+                printf(" : %d\n", count_arr[max_index]);
+                count_arr[max_index] = -1;
+            // if the column does not have quotes
+            } else {
+                printf("%s : %d\n", static_arr[max_index], count_arr[max_index]);
+                count_arr[max_index] = -1;
+            }
         }
     }
-    //printf("%d\n", max_num);
-
     return 0;
 }
 
