@@ -197,10 +197,20 @@ int main(int argc, char** argv){
         } else if (i < reps){
             // if the column does have quotes
             if (quotes_checker[name_col] == 1){
+                char* test_trial = static_arr[max_index];
                 //remove the quotes when printing 
-                for (int k = 1; k < strlen(static_arr[max_index]) - 1; k++){
-                    printf("%c", static_arr[max_index][k]);
-                }
+                //char* test_trial = malloc(sizeof(char) * strlen(static_arr[max_index]));
+                //char* test_trial2 = malloc(sizeof(char) * (strlen(static_arr[max_index]) - 2));
+                //test_trial = static_arr[max_index];
+                //memmove(test_trial2, test_trial + 1, strlen(static_arr[max_index]));
+                //printf("%s",test_trial2);
+                //free(test_trial);
+                //free(test_trial2);
+                // for (int k = 1; k < strlen(static_arr[max_index]) - 1; k++){
+                //     printf("%c", static_arr[max_index][k]);
+                // }
+                int unquoted_length = strlen(static_arr[max_index]) - 2;
+                printf("%.*s", unquoted_length, test_trial + 1);
                 printf(": %d\n", count_arr[max_index]);
                 count_arr[max_index] = -1;
             // if the column does not have quotes
