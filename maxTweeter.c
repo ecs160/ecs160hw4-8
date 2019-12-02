@@ -24,7 +24,6 @@ int main(int argc, char** argv){
     int quotes_tracker = 0;
     int name_col = 0;
 
-    //char* token_trial3 = malloc(1024);
     if (argc != 2){
         printf("Invalid Input Format\n");
         exit(0);
@@ -39,7 +38,6 @@ int main(int argc, char** argv){
         }
 
         int counter_line = 0;
-        //int name_col = 0;
 
         int name_header_there = 0;
 
@@ -54,7 +52,6 @@ int main(int argc, char** argv){
                 exit(0);
             }
             char* token = NULL;
-            //printf("%s\n", token);
             int counter_col = 0;
 
             // have to check each token, it just takes away all the blanks for some reason
@@ -68,7 +65,6 @@ int main(int argc, char** argv){
                     exit(0);
                 //check for matching parentheses
                 } else if (counter_line == 0 && !strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
-                    //printf("working quotes\n");
                     quotes_checker[quotes_tracker] = 1;
                     quotes_tracker++;
                 //check for no quotes at beginning and end
@@ -89,8 +85,6 @@ int main(int argc, char** argv){
                 // find "name" in the csv header file first line
                 // !strncmp(token, name, 5) finds the "name"
                 if (counter_line == 0 && (!strncasecmp(token, name, 5) || !strncasecmp(token, quoted_name, 7))){
-                    //printf("Strcmp #: %d ",  counter_col);
-                    //printf("Strlen: %lu, String: %s\n", strlen(token), token);
                     //assign the column where the names are to use for comparison later
                     name_col = counter_col;
                     name_header_there++;
@@ -103,7 +97,6 @@ int main(int argc, char** argv){
                         exit(0);
                     //check for matching parentheses
                     } else if (!strncmp(&token[0],"\"",1) && !strncmp(&token[strlen(token) - 1],"\"",1)){
-                        //printf("working quotes\n");
                         int non_header_quoted = 1;
                         if (non_header_quoted != quotes_checker[counter_col]){
                             printf("Invalid Input Format\n");
@@ -111,7 +104,6 @@ int main(int argc, char** argv){
                         }
                     //check for no quotes at beginning and end
                     } else if (strncmp(&token[0],"\"",1) && strncmp(&token[strlen(token) - 1],"\"",1)){
-                        //printf("working no quotes\n");
                         int non_header_quoted = 0;
                         if (non_header_quoted != quotes_checker[counter_col]){
                             printf("Invalid Input Format\n");
@@ -127,22 +119,13 @@ int main(int argc, char** argv){
                         exit(0);
                     }
                 }
-                //printf("Outside:%s\n",token);
-                //free(token_trial3);
 
                 //check the specific column for the name
                 if (counter_line > 0 && counter_col == name_col) {
-                    //need to make a key and value sort of thing in c
-                    //No maps in c, so use a struct???
                     int found_match = 0;
-                    //printf("%s\n",token);
-                    //seg fault
                     for (int i = 0; i < array_tracker; i++){
                         // if they have the same name, then increment the count
-                        //printf("Comparing %s with %s\n", token, static_arr[i]);
                         if (!strncasecmp(token, static_arr[i], strlen(static_arr[i]) + 1)) {
-                            //printf("Incrementing count for %s\n", static_arr[i]);
-                            //printf("Old count: %d\n", count_arr[i]);
                             count_arr[i] = count_arr[i]+ 1;
                             found_match = 1;
                             break;
@@ -153,17 +136,11 @@ int main(int argc, char** argv){
                     if (found_match == 0){
                             static_arr[array_tracker] = token;
                             count_arr[array_tracker] = count_arr[array_tracker] + 1;
-                            //printf("array_tracker: %d", array_tracker);
                             array_tracker++;
                     }
-                    //printf("%s\n", token);
                 }
-                //token = strtok(NULL, ",");
-                //printf("%s\n", token);
                 counter_col++; 
             }
-            //printf("%s\n", token);
-            //printf("%s\n",eachline);
 
             if (name_header_there == 0){
                 printf("Invalid Input Format\n");
@@ -198,17 +175,7 @@ int main(int argc, char** argv){
             // if the column does have quotes
             if (quotes_checker[name_col] == 1){
                 char* test_trial = static_arr[max_index];
-                //remove the quotes when printing 
-                //char* test_trial = malloc(sizeof(char) * strlen(static_arr[max_index]));
-                //char* test_trial2 = malloc(sizeof(char) * (strlen(static_arr[max_index]) - 2));
-                //test_trial = static_arr[max_index];
-                //memmove(test_trial2, test_trial + 1, strlen(static_arr[max_index]));
-                //printf("%s",test_trial2);
-                //free(test_trial);
-                //free(test_trial2);
-                // for (int k = 1; k < strlen(static_arr[max_index]) - 1; k++){
-                //     printf("%c", static_arr[max_index][k]);
-                // }
+                //remove the quotes when printing
                 int unquoted_length = strlen(static_arr[max_index]) - 2;
                 printf("%.*s", unquoted_length, test_trial + 1);
                 printf(": %d\n", count_arr[max_index]);
